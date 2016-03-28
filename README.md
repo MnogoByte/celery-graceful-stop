@@ -8,7 +8,7 @@
 2. Also, if `celery` receives yet another `SIGTERM` system signal, it's terminate all tasks by **Cold shutdown** procedure.
 
 This module provides solution for two cases described above.
-Becouse, it's important to waiting for tasks have been finished in case of long running tasks.
+Because, it's important to waiting for tasks have been finished in case of long running tasks.
 
 # Installation & Setup
 
@@ -31,7 +31,7 @@ celery_gracefull_stop.register(app)
 
 You can use this module for gracefull reload of celery worker.
 Look at [celery@.service](systemd/celery@.service) sample.
-This solution works only if you starts only one worker by registered service, becouse systemd require only one master `pid` for restart. (e.g. you can register multiple services within this service file by `systemctl enable celery@<service_name>`. Also, you must have `/etc/conf.d/celery_<service_name>` configuration file).
+This solution works only if you starts only one worker by registered service, because systemd require only one master `pid` for restart. (e.g. you can register multiple services within this service file by `systemctl enable celery@<service_name>`. Also, you must have `/etc/conf.d/celery_<service_name>` configuration file).
 
 # Limitations
 

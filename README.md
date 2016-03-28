@@ -1,14 +1,17 @@
-# celery-gracefull-stop
+# celery-graceful-stop
 
-[Celery](http://celeryproject.org) plugin, thats adds ability to gracefull stop worker.
+[Celery](http://celeryproject.org) plugin provides ability of graceful worker stopping.
 
 # Problem
+Production deployment of long running tasks require worker to be stopped gracefully. Unfortunately celery got different behaviour:
 
-1. When `celery` receives `SIGTERM` system signal, it's begin stop worker procedure called **Warm shutdown**. Due this procedure, `inspect` and `control` commands are unavailable.
-2. Also, if `celery` receives yet another `SIGTERM` system signal, it's terminate all tasks by **Cold shutdown** procedure.
+1. Receiving `SIGTERM` signal by `celery` results starting **Warm shutdown** procedure. Due this procedure, `inspect` and `control` commands become unavailable.
+2. More than that, all tasks are terminated forcely by the second `SIGTERM` with the **Cold shutdown** procedure.
 
-This module provides solution for two cases described above.
-Because, it's important to waiting for tasks have been finished in case of long running tasks.
+This module provides more consistent approach to this problem, it
+
+1. overrides `SIGTERM` receiver to prevent default **Warm shutdown** and **Cold shutdown** worker behaviour,
+2. forces `inspect` and `control` commands to be working even after `SIGTERM` signal received.
 
 # Installation & Setup
 
@@ -16,26 +19,27 @@ Because, it's important to waiting for tasks have been finished in case of long 
 pip install git+https://github.com/MnogoByte/celery-gracefull-stop.git
 ```
 
-Then, add following lines to both of your `proj/celery.py` file contains `app` instance.
+Append your `proj/celery.py` file containg `app` instance with the following lines.
 
 ```python
-import celery_gracefull_stop
-celery_gracefull_stop.register(app)
+import celery_graceful_stop
+celery_graceful_stop.register(app)
 ```
 
 # Settings 
 
-- `CELERY_GRACEFULL_STOP` (boolean). Enables, or disables gracefull stop function. (`True` by default)
+- `CELERY_GRACEFUL_STOP` (boolean). Controls graceful stop function. (`True` by default)
 
-# Systemd users
+# Using with systemd
 
-You can use this module for gracefull reload of celery worker.
-Look at [celery@.service](systemd/celery@.service) sample.
-This solution works only if you starts only one worker by registered service, because systemd require only one master `pid` for restart. (e.g. you can register multiple services within this service file by `systemctl enable celery@<service_name>`. Also, you must have `/etc/conf.d/celery_<service_name>` configuration file).
+1. Define 1 service per each worker you got (systemd requirement of only one master `pid` for restart).
+2. Provide `/etc/conf.d/celery_<service_name>` configuration file for each worker.
+3. Add [celery@.service](systemd/celery@.service) file into your system.
+4. Register your service with `systemctl enable celery@<service_name>`.
 
 # Limitations
 
-- This module disables `pool_shrink`, `pool_grow`, `autoscale`, `pool_reload`, `add_consumer`, `cancel_consumer` control commands after receving `SIGTERM` signal. Actually, you'll does not need to call them when a worker is shutting down, because a worker will not receives new tasks.
+- This module disables `pool_shrink`, `pool_grow`, `autoscale`, `pool_reload`, `add_consumer`, `cancel_consumer` control commands after receiving `SIGTERM` signal. Actually, you'll does not need to call them when a worker is shutting down, because a worker will not receives new tasks.
 - This module has been tested only with celery 3.1 with pool=prefork.
 
 # Author
@@ -44,4 +48,4 @@ This solution works only if you starts only one worker by registered service, be
 
 # License
 
-[BSD - 3](LICENSE)
+BSD - 3

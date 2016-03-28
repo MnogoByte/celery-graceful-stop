@@ -1,0 +1,30 @@
+[Unit]
+Description=Celery workers
+After=network.target
+
+[Service]
+Type=forking
+User=celery
+Group=celery
+Environment=CELERY_NODE=%I
+EnvironmentFile=/etc/conf.d/celery_%I
+WorkingDirectory=/sites/club
+PermissionsStartOnly=true
+Restart=always
+ExecStartPre=/bin/mkdir -p /var/log/celery
+ExecStartPre=/bin/chown -R club:club /var/log/celery
+ExecStartPre=/bin/mkdir -p /var/run/celery
+ExecStartPre=/bin/chown -R club:club /var/run/celery
+ExecStart=/sites/club/env/bin/celery multi start %I \
+    -A $CELERY_APP --pidfile=${CELERYD_PID_FILE} \
+    --logfile=${CELERYD_LOG_FILE} --loglevel="${CELERYD_LOG_LEVEL}" \
+    $CELERYD_OPTS
+ExecStop=/sites/club/env/bin/celery multi stopwait %I \
+    --pidfile=${CELERYD_PID_FILE}
+ExecReload=/sites/club/env/bin/celery multi stop %I \
+    --pidfile=${CELERYD_PID_FILE}
+
+
+[Install]
+WantedBy=multi-user.target
+

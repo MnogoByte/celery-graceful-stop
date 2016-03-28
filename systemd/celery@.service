@@ -12,9 +12,9 @@ WorkingDirectory=/<proj_path>
 PermissionsStartOnly=true
 Restart=always
 ExecStartPre=/bin/mkdir -p /var/log/celery
-ExecStartPre=/bin/chown -R club:club /var/log/celery
+ExecStartPre=/bin/chown -R celery:celery /var/log/celery
 ExecStartPre=/bin/mkdir -p /var/run/celery
-ExecStartPre=/bin/chown -R club:club /var/run/celery
+ExecStartPre=/bin/chown -R celery:celery /var/run/celery
 ExecStart=/<proj_path>/env/bin/celery multi start %I \
     -A $CELERY_APP --pidfile=${CELERYD_PID_FILE} \
     --logfile=${CELERYD_LOG_FILE} --loglevel="${CELERYD_LOG_LEVEL}" \

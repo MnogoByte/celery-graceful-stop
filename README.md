@@ -43,4 +43,4 @@ This module has been tested only with celery 3.1 with pool=prefork.
 
 # License
 
-BSD - 3
+[BSD - 3](LICENSE)

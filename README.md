@@ -35,7 +35,8 @@ This solution works only if you starts only one worker by registered service, be
 
 # Limitations
 
-This module has been tested only with celery 3.1 with pool=prefork.
+- This module disables `pool_shrink`, `pool_grow`, `autoscale`, `pool_reload`, `add_consumer`, `cancel_consumer` control commands after receving `SIGTERM` signal. Actually, you`ll does not need to call them when a worker is shutting down, because worker does not receives new tasks.
+- This module has been tested only with celery 3.1 with pool=prefork.
 
 # Author
 

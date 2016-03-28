@@ -15,13 +15,13 @@ ExecStartPre=/bin/mkdir -p /var/log/celery
 ExecStartPre=/bin/chown -R club:club /var/log/celery
 ExecStartPre=/bin/mkdir -p /var/run/celery
 ExecStartPre=/bin/chown -R club:club /var/run/celery
-ExecStart=/sites/club/env/bin/celery multi start %I \
+ExecStart=/<proj_path>/env/bin/celery multi start %I \
     -A $CELERY_APP --pidfile=${CELERYD_PID_FILE} \
     --logfile=${CELERYD_LOG_FILE} --loglevel="${CELERYD_LOG_LEVEL}" \
     $CELERYD_OPTS
-ExecStop=/sites/club/env/bin/celery multi stopwait %I \
+ExecStop=/<proj_path>/env/bin/celery multi stopwait %I \
     --pidfile=${CELERYD_PID_FILE}
-ExecReload=/sites/club/env/bin/celery multi stop %I \
+ExecReload=/<proj_path>/env/bin/celery multi stop %I \
     --pidfile=${CELERYD_PID_FILE}
 
 

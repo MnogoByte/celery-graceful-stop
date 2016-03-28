@@ -8,7 +8,7 @@ User=celery
 Group=celery
 Environment=CELERY_NODE=%I
 EnvironmentFile=/etc/conf.d/celery_%I
-WorkingDirectory=/sites/club
+WorkingDirectory=/<proj_path>
 PermissionsStartOnly=true
 Restart=always
 ExecStartPre=/bin/mkdir -p /var/log/celery

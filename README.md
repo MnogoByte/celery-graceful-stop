@@ -16,7 +16,7 @@ This module provides more consistent approach to this problem, it
 # Installation & Setup
 
 ```
-pip install git+https://github.com/MnogoByte/celery-gracefull-stop.git
+pip install git+https://github.com/MnogoByte/celery-graceful-stop.git
 ```
 
 Append your `proj/celery.py` file containg `app` instance with the following lines.

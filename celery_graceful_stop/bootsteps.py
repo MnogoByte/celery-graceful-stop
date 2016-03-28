@@ -7,12 +7,12 @@ from celery.worker.control import Panel
 from celery.utils.log import worker_logger as logger
 
 __all__ = [
-    'GracefullWorkerStop',
-    'GracefullConsumerStop'
+    'GracefulWorkerStop',
+    'GracefulConsumerStop'
 ]
 
 
-class GracefullWorkerStop(bootsteps.StartStopStep):
+class GracefulWorkerStop(bootsteps.StartStopStep):
     conditional = True
     requires = (
         'celery.worker.components:Timer',
@@ -21,7 +21,7 @@ class GracefullWorkerStop(bootsteps.StartStopStep):
     )
 
     def __init__(self, worker, **kwargs):
-        self.enabled = getattr(worker.app.conf, 'CELERY_GRACEFULL_STOP', True)
+        self.enabled = getattr(worker.app.conf, 'CELERY_GRACEFUL_STOP', True)
 
     def install_worker_term_handler(self):
         def on_next_TERM(*args):
@@ -30,7 +30,7 @@ class GracefullWorkerStop(bootsteps.StartStopStep):
         def _handler(*args):
             install_worker_term_hard_handler(self.worker, sig='SIGINT')
             platforms.signals['SIGTERM'] = on_next_TERM
-            self.worker.gracefull_stop()
+            self.worker.graceful_stop()
 
         platforms.signals['SIGTERM'] = _handler
 
@@ -38,18 +38,18 @@ class GracefullWorkerStop(bootsteps.StartStopStep):
         self.worker = worker
         self.timer = worker.timer
         self.pool = worker.pool
-        worker.gracefull_stop = self.gracefull_stop_handler
+        worker.graceful_stop = self.graceful_stop_handler
 
-    def gracefull_stop_handler(self):
+    def graceful_stop_handler(self):
         self.worker.blueprint.close(self.worker)
         self._wait_stop_pool()
         self.wait_stop_timer = self.timer.call_repeatedly(0.2, self._wait_stop_pool)
 
     def close(self, worker):
-        worker.consumer.gracefull_stop()
+        worker.consumer.graceful_stop()
 
     def start(self, worker):
-        super(GracefullWorkerStop, self).start(worker)
+        super(GracefulWorkerStop, self).start(worker)
 
         self.install_worker_term_handler()
 
@@ -65,7 +65,7 @@ class GracefullWorkerStop(bootsteps.StartStopStep):
             raise WorkerShutdown()
 
 
-class GracefullConsumerStop(bootsteps.StartStopStep):
+class GracefulConsumerStop(bootsteps.StartStopStep):
     conditional = True
     requires = (
         'celery.worker.consumer:Connection',
@@ -81,12 +81,12 @@ class GracefullConsumerStop(bootsteps.StartStopStep):
     ]
 
     def __init__(self, consumer, **kwargs):
-        self.enabled = getattr(consumer.app.conf, 'CELERY_GRACEFULL_STOP', True)
+        self.enabled = getattr(consumer.app.conf, 'CELERY_GRACEFUL_STOP', True)
 
     def get_restricted_control_actions(self):
         return self.restricted_control_actions
 
-    def gracefull_stop(self):
+    def graceful_stop(self):
         for step in self.consumer.steps:
             if type(step) not in self.requires:
                 if hasattr(step, 'stop'):
@@ -104,4 +104,4 @@ class GracefullConsumerStop(bootsteps.StartStopStep):
 
     def create(self, consumer):
         self.consumer = consumer
-        consumer.gracefull_stop = self.gracefull_stop
+        consumer.graceful_stop = self.graceful_stop

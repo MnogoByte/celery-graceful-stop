@@ -32,7 +32,7 @@ celery_graceful_stop.register(app)
 
 # Using with systemd
 
-1. Define 1 service per each worker you got (systemd requirement of only one master `pid` for restart).
+1. Define 1 service per each worker you got (systemd require only one master `pid` for restart).
 2. Provide `/etc/conf.d/celery_<service_name>` configuration file for each worker.
 3. Add [celery@.service](systemd/celery@.service) file into your system.
 4. Register your service with `systemctl enable celery@<service_name>`.

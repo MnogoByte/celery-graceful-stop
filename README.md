@@ -35,7 +35,7 @@ This solution works only if you starts only one worker by registered service, be
 
 # Limitations
 
-This module was tested on only with celery 3.1 with pool=prefork.
+This module has been tested only with celery 3.1 with pool=prefork.
 
 # Author
 

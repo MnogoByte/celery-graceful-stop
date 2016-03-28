@@ -4,16 +4,16 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name='celery-gracefull-stop',
+    name='celery-graceful-stop',
     version='0.0.1',
-    description='Celery plugin thats adds ability to gracefull stop worker',
+    description='Celery plugin thats adds ability to graceful stop worker',
     author='Mikhail Antonov',
     author_email='atin65536@gmail.com',
     long_description=open('README.md').read(),
-    url='https://github.com/MnogoByte/celery-gracefull-stop',
+    url='https://github.com/MnogoByte/celery-graceful-stop',
     packages=find_packages(),
     install_requires=["celery>=3.1"],
-    keywords=['celery', 'stop', 'gracefull', 'reload'],
+    keywords=['celery', 'stop', 'graceful', 'reload'],
     classifiers=[
         "Framework :: Celery",
         "Intended Audience :: Developers",

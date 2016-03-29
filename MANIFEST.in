@@ -1,2 +1,2 @@
-include LICENSE README.md
+include LICENSE README.md CHANGES.md
 recursive-include systemd .service

@@ -15,7 +15,6 @@ setup(
     install_requires=["celery>=3.1"],
     keywords=['celery', 'stop', 'graceful', 'reload'],
     classifiers=[
-        "Framework :: Celery",
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
         "Operating System :: OS Independent",
@@ -23,7 +22,7 @@ setup(
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
-        "Development Status :: 1 - Alpha",
+        "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: BSD License",
     ],
     license="BSD"

@@ -39,7 +39,7 @@ celery_graceful_stop.register(app)
 
 # Limitations
 
-- This module disables `pool_shrink`, `pool_grow`, `autoscale`, `pool_reload`, `add_consumer`, `cancel_consumer` control commands after receiving `SIGTERM` signal. Actually, you'll does not need to call them when a worker is shutting down, because a worker will not receives new tasks.
+- This module disables `pool_shrink`, `pool_grow`, `autoscale`, `pool_reload`, `add_consumer`, `cancel_consumer` control commands after receiving `SIGTERM` signal. Actually, you'll does not need to call them when the worker is shutting down, because worker will not starts new tasks.
 - This module has been tested only with celery 3.1 with pool=prefork.
 
 # Author
